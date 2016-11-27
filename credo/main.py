@@ -14,6 +14,7 @@ def template(path):
 
 
 def render_markdown(belief_group):
+    print belief_group
     _type = belief_group.get("type")
     beliefs = "\n\n".join(["""
 ## {0}
@@ -21,15 +22,35 @@ def render_markdown(belief_group):
 ### Summary
 
 {1}
-    """.format(elem["title"], elem["summary"])
+
+### Caveats
+
+{2}
+    """.format(
+        elem["title"],
+        elem["summary"],
+        "".join(
+            "- %s \n" % datum
+            for datum in elem["caveats"]
+            )
+        )
         for elem in belief_group["data"]
     ])
+
     print """
 # {0}    
 
 {1}
     """.format(_type.title(), beliefs)
 
+def feeling(doc):
+    pass
+
+def opinion(doc):
+    pass
+
+def stance(doc):
+    pass
 
 def main():
     all_beliefs = groupby("belief", list(concat(concat(map(template, __all_paths__)))))
